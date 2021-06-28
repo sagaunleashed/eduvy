@@ -1,0 +1,383 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="page-inner">
+    <div class="page-title mb-15">
+        <div class="pull-left">
+            <h3 class="breadcrumb-header">Fee Structure</h3>
+            <p class="text-muted mb-0">Fee Structure for each Courses</p>
+        </div>
+        <div class="pull-right">
+            <div class="btn-group mx-auto">
+                <ol class="breadcrumb hide-phone pt-4 pb-4 m-0">
+                    <li class="breadcrumb-item"><a href="#">Eduvy</a></li>
+                    <li class="breadcrumb-item"><a href="#">Course</a></li>
+                    <li class="breadcrumb-item active">Course Fee</li>
+                </ol>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+    <div id="main-wrapper">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="panel mb-0">
+                    <div class="panel-body">
+                        <h4 class="mt-0 header-title"></h4>
+                        <!--<p class="text-muted mb-30 font-15">Nullam quis risus eget urna mollis ornare vel eu leo. Cum sociis natoque penatibus et magnis dis parturient monte.</p>-->
+                        <div class="row data-filter" style="padding-top:50px;">
+                            <div class="col-md-1">
+                            </div>
+                            <form method="post" action="">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <input type="search" id="searchput" name="search" placeholder="Search..." class="form-control">
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        <button name="searchbutt" id="searchbut" class="btn btn-warning form-control">Search</button>
+                                    </div>
+                                </div>
+                            </form>
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <button name="addnew" class="btn btn-success form-control btn-add">Add <b class="fa fa-plus"></b></button>
+                                </div>
+                            </div>
+                        </div>
+                        <style>
+                            strong {
+                                position: relative !important;
+                                top: 5px !important;
+                            }
+                            
+                            .btn-group>.btn:first-child {
+                                width: 100% !important;
+                            }
+                            
+                            .btn-group {
+                                width: 100% !important;
+                            }
+                            
+                            td {
+                                vertical-align: inherit !important;
+                            }
+                            
+                            .eduvy-img-listview {
+                                max-width: 70px;
+                                max-height: 70px;
+                            }
+                            
+                            .dropdown-menu {
+                                width: 100% !important;
+                                max-height: 200px !important;
+                                overflow-y: scroll !important;
+                                overflow-x: hidden !important;
+                            }
+                            
+                            .page-item {
+                                margin-left: 15px !important;
+                            }
+                        </style>
+                        <div>
+                            <table class="table table-striped table-responsive data-list">
+                                <thead>
+                                    <tr>                                   
+                                        <th scope="col">Courses</th>
+                                        <th scope="col">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                {% for i in feestruct %}
+                                    <tr>
+                                        <td scope="row">{{i.institutionCourse.courseId.CourseName}}</td>
+                                        <td>
+                                            <span style="cursor:pointer;font-size:1em;" class="fa fa-pencil edit-column" id="1">
+											</span>
+                                            <span style="cursor:pointer;font-size:1em;" class="fa fa-trash delete-column" id="1">
+											</span>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                
+                                </tbody>
+                            </table>
+                            <style>
+
+                                /* The Modal (background) */
+                                .modal {
+                                display: none; /* Hidden by default */
+                                position: fixed; /* Stay in place */
+                                z-index: 101; /* Sit on top */
+                                padding-top: 100px; /* Location of the box */
+                                left: 0;
+                                top: 0;
+                                width: 100%; /* Full width */
+                                height: 100%; /* Full height */
+                                overflow: auto; /* Enable scroll if needed */
+                                background-color: rgb(0,0,0); /* Fallback color */
+                                background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+                                }
+
+                                /* Modal Content */
+                                .modal-content {
+                                position:relative;
+                                background-color: #fefefe;
+                                margin: auto;
+                                padding: 20px;
+                                border: 1px solid #888;
+                                max-width:768px;
+                                width: 80%;
+                                height:50%;
+                                display:flex;
+                                justify-content:space-around;
+                                align-items:center;
+                                flex-direction:column;
+                                }
+
+                                /* The Close Button */
+                                .close {
+                                color: #aaaaaa;
+                                float: right;
+                                font-size: 28px;
+                                font-weight: bold;
+                                position:absolute;
+                                top:10px;
+                                right:10px;
+                                }
+
+                                .close:hover,
+                                .close:focus {
+                                color: #000;
+                                text-decoration: none;
+                                cursor: pointer;
+                                }
+                            </style>
+                            <div class="row data-add" style="padding-top:50px;display:none">
+                                <form action="institutecourse_fee" method="post">
+                                    <div class="col-lg-12" id="items">
+                                        <div class="col-lg-4">
+                                            <div class="form-group">
+                                                <label>Course</label>
+                                                <select class="form-control" name="course">
+                                                {% for i in insticourse %}
+													<option value="{{i.id}}">{{i.courseId.CourseName}}</option>
+                                                {% endfor %}
+												</select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-12" style="padding-top:50px;">
+                                    <div class="row" style="align-items: center;display: flex;width: 100%;justify-content: center;">
+                                        <div style="margin:5px;"><div class="btn btn-primary Add Field" id="myBtn">Add Field</div>
+                                        </div>          
+                                        <div style="margin:5px;"><button class="btn btn-success">Submit</button>
+                                        </div>
+                                        <div style="margin:5px;"><button type="button" class="btn btn-danger btn-close">Close</button></div>
+                                    </div>
+                                    </div>
+                                </form>
+                            </div>
+
+                            <div class="row data-update" style="padding-top:50px;display:none">
+                                <form method="post" enctype="multipart/form-data" action="http://eduvyerp.co.in/eduvy/admin/user_group/update_user_group">
+                                    <div class="col-lg-12">
+                                        <div class="col-lg-4">
+                                            <div class="form-group">
+                                                <label>User Group Name</label>
+                                                <input type="text" class="form-control user_group_name" name="name" placeholder="User Group Name" required="">
+                                                <input type="text" name="_id" class="user_group_id" hidden="" style="display:none">
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-4">
+                                            <div class="form-group permissions_list">
+
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-4">
+                                            <div class="form-group">
+                                                <label>Status</label>
+                                                <select class="form-control status" name="status">
+													<option value="Active">Active</option>
+													<option value="Inactive">Inactive</option>
+												</select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-12" style="padding-top:50px;">
+                                        <div class="col-lg-6 text-right"><button class="btn btn-success">Submit</button>
+                                        </div>
+                                        <div class="col-lg-6 text-left"><button type="button" class="btn btn-danger btn-close">Close</button></div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="page-footer">
+        <!--<p>&copy; 2019 Fadmin - Crafted with <i class="mdi mdi-heart text-danger"></i> by ThemesBoss.</p>-->
+    </div>
+    <div id="myModal" class="modal">
+
+    <!-- Modal content -->
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h4>Add Following Fee Type:</h4>
+        <select class="form-control" id="field_value">
+        <option selected>Open this select menu</option>
+        <option value="1">Admission Fee</option>
+        <option value="2">Tution Fee</option>
+        <option value="3">Exam Fee</option>
+        <option value="4">Mark Card Fee</option>
+        <option value="5">Caution Deposit</option>
+        <option value="6">Library Fee</option>
+        <option value="7">Sports Fee</option>
+        <option value="8">Registration Fee</option>
+        <option value="9">Hostel Fee</option>
+        <option value="10">Uniform Fee</option>
+        <option value="11">Transportation Fee</option>
+        <option value="12">Clinical Fee</option>
+        <option value="13">Other Fee</option>
+        </select>
+        
+        <div style="margin:5px;"><button class="btn btn-primary add_field">Add Field</button>
+
+    </div>
+
+    </div>
+<script>
+    // Get the modal
+    var modal = document.getElementById("myModal");
+
+    // Get the button that opens the modal
+    var btn = document.getElementById("myBtn");
+
+    // Get the <span> element that closes the modal
+    var span = document.getElementsByClassName("close")[0];
+
+    // When the user clicks the button, open the modal 
+    btn.onclick = function() {
+    modal.style.display = "block";
+    }
+
+    // When the user clicks on <span> (x), close the modal
+    span.onclick = function() {
+    modal.style.display = "none";
+    }
+
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function(event) {
+    if (event.target == modal) {
+        modal.style.display = "none";
+    }
+    }
+</script>
+<script>
+$(document).ready(function(){
+    //when the Add Field button is clicked
+    $("#add").click(function(e) {
+        //Append a new row of code to the "#items" div
+        $("#items").append(
+        '<div class="next-referral col-4"><input id="textinput" name="textinput" type="text" placeholder="Enter name of referral" class="form-control input-md"></div>'
+        );
+    });
+    $(".btn-add").click(function () {
+
+        $(".data-list").hide();
+        $(".data-filter").hide();
+        $(".data-add").show();
+        $("#pagination").hide("");
+        $(".header-title").html("Add Course");
+    });
+    $(".add_field").click(function(){
+        
+        var modal = document.getElementById("myModal");
+        var x = $('#field_value').val();
+        if(x == 1){
+            $("#items").append(
+            '<div class="col-lg-4"><div class="form-group"><label>Addmission Fee</label><input type="number" name="addmission_fee" placeholder="Addmission Fee" class="form-control"></div></div>'
+            );
+        }
+        if(x == 2){
+            $("#items").append(
+            '<div class="col-lg-4"><div class="form-group"><label>Tution Fee</label><input type="number" name="tution_fee" placeholder="Tution Fee" class="form-control"></div></div>'
+            );
+        }
+        if(x == 3){
+            $("#items").append(
+            '<div class="col-lg-4"><div class="form-group"><label>Exam Fee</label><input type="number" name="exam_fee" placeholder="Exam Fee" class="form-control"></div></div>'
+            );
+        }
+        if(x == 4){
+            $("#items").append(
+            '<div class="col-lg-4"><div class="form-group"><label>Mark Card Fee</label><input type="number" name="mark_card_fee" placeholder="Mark Card Fee" class="form-control"></div></div>'
+            );
+        }
+        if(x == 5){
+            $("#items").append(
+            '<div class="col-lg-4"><div class="form-group"><label>Caution Deposit</label><input type="number" name="caution_deposit" placeholder="Caution Deposit" class="form-control"></div></div>'
+            );
+        }
+        if(x == 6){
+            $("#items").append(
+            '<div class="col-lg-4"><div class="form-group"><label>Library Fee</label><input type="number" name="library_fee" placeholder="Library Fee" class="form-control"></div></div>'
+            );
+        }
+        if(x == 7){
+            $("#items").append(
+            '<div class="col-lg-4"><div class="form-group"><label>Sports Fee</label><input type="number" name="sports_fee" placeholder="Sports Fee" class="form-control"></div></div>'
+            );
+        }
+        if(x == 8){
+            $("#items").append(
+            '<div class="col-lg-4"><div class="form-group"><label>Registration Fee</label><input type="number" name="registration_fee" placeholder="Registration Fee" class="form-control"></div></div>'
+            );
+        }
+        if(x == 9){
+            $("#items").append(
+            '<div class="col-lg-4"><div class="form-group"><label>Hostel Fee</label><input type="number" name="hostel_fee" placeholder="Hostel Fee" class="form-control"></div></div>'
+            );
+        }
+        if(x == 10){
+            $("#items").append(
+            '<div class="col-lg-4"><div class="form-group"><label>Uniform Fee</label><input type="number" name="uniform_fee" placeholder="Uniform Fee" class="form-control"></div></div>'
+            );
+        }
+        if(x == 11){
+            $("#items").append(
+            '<div class="col-lg-4"><div class="form-group"><label>Transportation Fee</label><input type="number" name="transportation_fee" placeholder="Transportation Fee" class="form-control"></div></div>'
+            );
+        }
+        if(x == 12){
+            $("#items").append(
+            '<div class="col-lg-4"><div class="form-group"><label>Clinical Fee</label><input type="number" name="clinical_fee" placeholder="Clinical Fee" class="form-control"></div></div>'
+            );
+        }
+        if(x == 13){
+            $("#items").append(
+            '<div class="col-lg-4"><div class="form-group"><label>Other Fee</label><input type="number" name="other_fee" placeholder="Other Fee" class="form-control"></div></div>'
+            );
+        }
+        modal.style.display = "none";
+        var rm = "#field_value option[value='"+x+"']"      
+        $(rm).remove();
+    });
+
+    $(".btn-close").click(function () {
+
+        $(".data-list").show();
+        $(".data-filter").show();
+        $(".data-add").hide();
+        $(".data-update").hide();
+        $(".header-title").html("");
+        $("#pagination").show("");
+    });
+});
+</script>
+
+
+{% endblock  %}
